@@ -17,7 +17,7 @@
 constexpr int charArrSize = 63;
 const std::array<char, charArrSize> alph {"abcdefghijklmno1pqrs2tuv3wx4yz5ABCD6EFGH7IJKL8MNOPQ9RSTU0VWXYZ"};
 
-auto threads_and_stops = std::list<std::pair<std::thread, std::shared_ptr<bool>>>{};
+auto threads_and_stops = std::vector<std::pair<std::thread, std::shared_ptr<bool>>>{};
 
 void signalHandler( int signum ) {
     std::cout << "\nInterrupt signal (" << signum << ") received. Joining threads\n";
@@ -86,6 +86,7 @@ int main() {
         number_of_threads = std::thread::hardware_concurrency();
     }
 
+    threads_and_stops.reserve(number_of_threads);
     std::cout << "Pattern: " << message;
     std::cout << "\nThreads: " << number_of_threads << std::endl;
 
@@ -101,7 +102,7 @@ int main() {
 
     std::cout << "\nrunning" << std::endl;
     for (auto &p : threads_and_stops) {
-        //Freeze here
+        //avoids ending the main thread. Program will close when it receives the interrupt signal
         p.first.join();
     }
 
