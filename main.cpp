@@ -52,12 +52,13 @@ void temp(std::mt19937 &gen, std::uniform_int_distribution<> &distrib, const std
 
         b64.Put(digest, sizeof(digest));
         b64.MessageEnd();
-
+        output = output.substr(0,6);
+        
         auto matches = std::distance(
             std::sregex_iterator(output.begin(), output.end(), rx),
             std::sregex_iterator());
         if (matches > 0) {
-            std::cout << "trip: #" << output.substr(0,6) << " password: #" << message << std::endl;
+            std::cout << "trip: #" << output << " password: #" << message << std::endl;
         }
         output.clear();
     }
